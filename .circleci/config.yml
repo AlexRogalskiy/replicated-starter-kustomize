@@ -1,0 +1,48 @@
+version: 2.1
+jobs:
+  lint:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.7
+    steps:
+      - checkout
+      - run:
+          name: lint
+          command: make lint lint_reporter=junit
+      - run:
+          name: prepare test results
+          command: |
+              mkdir -p test-results/replicated-lint
+              mv test-results/replicated-lint-results.xml test-results/replicated-lint/replicated-lint-results.xml
+      - store_test_results:
+          path:  test-results
+
+  release:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/node:8.7
+    steps:
+      - checkout
+      - run: |
+          opsys=linux
+          curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases/latest |\
+            grep browser_download |\
+            grep $opsys |\
+            cut -d '"' -f 4 |\
+            xargs curl -O -L
+          mv kustomize_*_${opsys}_amd64 kustomize
+          chmod u+x kustomize
+          sudo mv kustomize /usr/local/bin/
+      - run: make release CHANNEL=Unstable
+
+workflows:
+  version: 2
+  lint:
+    jobs:
+      - lint
+      - release:
+          requires:
+            - lint
+          filters:
+            branches:
+              only: master
