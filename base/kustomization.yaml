@@ -1,3 +1,5 @@
 namespace: '{{repl Namespace}}'
 resources:
   - ./deployment.yaml
+  - ./service.yaml
+  - ./ingress.yaml
