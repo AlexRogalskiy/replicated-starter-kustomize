@@ -2,10 +2,10 @@
 # kind: replicated
 
 replicated_api_version: 2.29.0
-name: "Seldon Starter PoC"
+name: "Kustomize Starter PoC"
 
 properties:
-  console_title: "Seldon Starter PoC"
+  console_title: "Kustomize Starter PoC"
   app_url: 'http://{{repl ConfigOption "hostname"}}:8008'
 
 host_requirements:

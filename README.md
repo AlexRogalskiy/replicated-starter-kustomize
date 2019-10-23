@@ -1,8 +1,8 @@
-Replicated Seldon Starter
+Replicated Kustomize Starter
 ==================
 
 Example project showcasing how power users can combine several Replicated tools in order to manage
-Replicated YAML for a [SeldonIO](https://www.seldon.io) ML project using a git repository.
+Replicated YAML for a kustomize project using a git repository.
 
 ### Prequisites
 
@@ -68,16 +68,6 @@ or even
 make lint release
 ```
 
-### Adding ML Models
-
-There is an example model written as a `SeldonDeployment` in `base/seldon-deployment-is.yaml`. You can change the image there, or add additional
-`SeldonDeployment` objects in that folder. You'll also need to add them to the list of `resources` in `base/kustomization.yaml`.
-
-A github issue summarization model, as described in [kubeflow/examples](https://github.com/kubeflow/examples/tree/master/github_issue_summarization), is used for this POC. A makefile is included to pull and retag a GCR.io image to the replicated registry.
-
-The [Seldon operator chart](https://github.com/SeldonIO/seldon-core/tree/master/helm-charts/seldon-core-operator) is templated out by [Replicated Ship](https://github.com/replicatedhq/ship) in `base/seldon-core-operator/rendered.yaml`, and will be deployed alongside the app to power any `SeldonDeployment`s.
-
-Issue summarization UI built per example in https://github.com/kubeflow/examples/blob/master/github_issue_summarization/04_querying_the_model.md
 
 ### Integrating with CI
 
@@ -109,4 +99,3 @@ These behaviors are documented and demonstrated in the [replicated-ci-demo](http
 
 Replicated starter files are licensed under an MIT License
 
-Seldon source is licensed under an Apache 2 license, which is included in [mean_classifier_example](./mean_classifier_example)
