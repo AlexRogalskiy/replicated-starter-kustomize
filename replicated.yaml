@@ -6,7 +6,7 @@ name: "Kustomize Starter PoC"
 
 properties:
   console_title: "Kustomize Starter PoC"
-  app_url: 'http://{{repl ConfigOption "hostname"}}:8008'
+  app_url: 'http://{{repl ConfigOption "hostname"}}'
 
 host_requirements:
   replicated_version: ">=2.37.0"
@@ -32,11 +32,6 @@ config:
 
 
 custom_metrics:
-  - target: stats.gauges.envoy.cluster.*.membership_healthy
-    retention: "1s:10m,1m:20m,1h:30d"
-    aggregation_method: "max"
-    xfiles_factor: 0.3
-
   - target: stats.gauges.retraced.api.EventCreater.createEvent.timer.*
     retention: "1s:10m,1m:20m,1h:30d"
     aggregation_method: "average"
@@ -44,22 +39,6 @@ custom_metrics:
 
 monitors:
   custom:
-    - name: Ambassador Backends
-      targets:
-        - alias(sumSeries(stats.gauges.envoy.cluster.cluster_issue_summarization_issue_summar*.membership_healthy), "issue-summarization")
-        - alias(sumSeries(stats.gauges.envoy.cluster.cluster_issue_summarization_ui*.membership_healthy), "issue-summarization-ui")
-      from: "-30minutes"
-      until: "-1minutes"
-      display:
-        label_unit: ""
-        label_scale: metric
-        label_min: 0
-        label_max: 10
-        label_range_override: true
-        label_count: 2
-        fill_color: rgba(255, 105, 0, 0.5)
-        stroke_color: "#ff6900"
-        css_class_name: app1-custom-metrics
     - name: Event Latency
       targets:
         - stats.gauges.retraced.api.EventCreater.createEvent.timer.p95
@@ -79,9 +58,9 @@ monitors:
 
 images:
 # this section needs to be included for airgap installs
-- name: issue-summarization
-  source: replicated
-  tag: "1.2"
+- name: k8s.gcr.io/echoserver
+  source: public
+  tag: "1.4"
 
 ---
 # kind: scheduler-kubernetes

@@ -1,17 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fake
+  name: echoheaders
 spec:
   selector:
     matchLabels:
-      foo: bar
+      app: echoheaders
+  replicas: 1
   template:
     metadata:
       labels:
-        foo: bar
+        app: echoheaders
     spec:
       containers:
-        - name: nginx
-          image: nginx
-
+      - image: k8s.gcr.io/echoserver:1.4
+        name: echoheaders
+        ports:
+        - containerPort: 8080
